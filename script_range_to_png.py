@@ -8,8 +8,6 @@ def log(message):
 
 def export_range_to_image(input_path, output_path, sheet_index, cell_range):
     try:
-        pixel_width = 1
-        pixel_height = 1
         # Подключение к LibreOffice
         local_context = uno.getComponentContext()
         resolver = local_context.ServiceManager.createInstanceWithContext(
@@ -30,16 +28,16 @@ def export_range_to_image(input_path, output_path, sheet_index, cell_range):
         # Установка области печати
         sheet.setPrintAreas((range_obj.RangeAddress,))
 
-        #page_width = int((range_size.Width / 96)* 2540)
-        #page_height = int((range_size.Height / 96)* 2540)
         # Установка масштабирования страницы
         page_styles = doc.StyleFamilies.getByName("PageStyles")
         page_style = page_styles.getByName(sheet.PageStyle)
 
-        page_style.Width = range_size.Width
+        #Устанавливаем размер изображения как размер у диапазона
+        page_style.Width = range_size.Width 
         page_style.Height = range_size.Height
-        page_style.HeaderIsOn = False  # Масштабировать по высоте
-        page_style.FooterIsOn = False  # Масштабировать по высоте
+
+        page_style.HeaderIsOn = False  # Отключаем header
+        page_style.FooterIsOn = False  # Отключаем footer
 
         page_style.ScaleToPagesX = 1  # Масштабировать по ширине
         page_style.ScaleToPagesY = 1  # Масштабировать по высоте
